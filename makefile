@@ -9,8 +9,13 @@ bossac = bossac
 # firmware, then run make (<your_program>.upload), e.g. make
 # examples/blink.upload
 
+# For libraries, download them into libs/libraries and list them here
+extras := Adafruit_NeoPixel
 libdir := $(patsubst %/makefile, %/libs, $(abspath $(lastword $(MAKEFILE_LIST))))
-libs := $(shell find libs/cores libs/variants -type f \( -name '*.c' -o -name '*.cpp' \) )
+extras_dirs := $(patsubst %, ${libdir}/libraries/%/, ${extras})
+extras_inc := $(patsubst %, -I%, ${extras_dirs})
+extras_libs := $(shell find ${extras_dirs} -path */examples -prune -o -name "*.cpp" -print) 
+libs := $(shell find libs/cores libs/variants -type f \( -name '*.c' -o -name '*.cpp' \)) ${extras_libs}
 libos := $(patsubst %, %.o, $(libs))
 
 all: examples/blink.bin
@@ -76,6 +81,7 @@ ccflags=\
 	-I${libdir}/libraries/ \
 	-I${libdir}/CMSIS/4.5.0/CMSIS/Include/ \
   -I${libdir}/CMSIS-Atmel/1.2.0/CMSIS/Device/ATMEL/  \
+	${extras_inc} \
   -mfloat-abi=hard \
   -mfpu=fpv4-sp-d16 
 
