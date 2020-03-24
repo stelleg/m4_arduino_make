@@ -1,14 +1,9 @@
-# Simple makefile for developing for grandcentral m4
+# Simple makefile for developing for grandcentral metro m4
 # You'll need versions of the following tools
 cxx = arm-none-eabi-g++ 
 cc = arm-none-eabi-gcc 
 objcopy = arm-none-eabi-objcopy 
 bossac = bossac 
-
-# Next, point your lib directory at where your adafruit package was installed
-pkgdir=${HOME}/.arduino15/
-adafruit=${pkgdir}/.arduino15/
-
 
 # Once you have them, double tap reset to make it ready to accept a new
 # firmware, then run make (<your_program>.upload), e.g. make
@@ -83,6 +78,7 @@ ccflags=\
   -I${libdir}/CMSIS-Atmel/1.2.0/CMSIS/Device/ATMEL/  \
   -mfloat-abi=hard \
   -mfpu=fpv4-sp-d16 
+
 .SECONDARY:
 %.cpp.o: %.cpp
 	${cxx} -c ${ccflags} -std=gnu++11 $< -o $@
@@ -96,7 +92,7 @@ ccflags=\
 %.bin: %.elf
 	${objcopy} -O binary $< $@
 
-%.upload: %
+%.upload: %.bin
 	bossac --port=ttyACM0 -U -i --offset=0x4000 -w -v $< -R
 
 .PHONY:
