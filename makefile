@@ -10,7 +10,7 @@ bossac = bossac
 # examples/blink.upload
 
 # For libraries, download them into libs/libraries and list them here
-extras := Adafruit_NeoPixel
+extras := Adafruit_NeoPixel MAX6675 Wire
 libdir := $(patsubst %/makefile, %/libs, $(abspath $(lastword $(MAKEFILE_LIST))))
 extras_dirs := $(patsubst %, ${libdir}/libraries/%/, ${extras})
 extras_inc := $(patsubst %, -I%, ${extras_dirs})
